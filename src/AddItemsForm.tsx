@@ -31,6 +31,7 @@ const AddItemForm = (props: AddItemFormPropsType) => {
                 value={title}
                 onChange={onChangeSetTitle}
                 onKeyDown={onKeyDownAddTask}
+
             />
             <button onClick={addTask}>+</button>
             {error && <div style={{color: "red", fontWeight: "bold"}}>Title is required!</div>}
