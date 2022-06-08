@@ -1,42 +1,57 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import {IconButton, TextField} from "@material-ui/core";
+import {AddCircleOutline} from "@material-ui/icons";
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm = (props: AddItemFormPropsType) => {
-    const [title, setTitle] = useState<string>("")
-    const [error, setError] = useState<boolean>(false)
-    const addTask = () => {
-        const taskTitle = title.trim()
-        if(taskTitle){
-            props.addItem(taskTitle)
-        } else {
-            setError(true)
-        }
-        setTitle("")
-    }
-    const onChangeSetTitle = (e: ChangeEvent<HTMLInputElement>)=> {
-        const taskTitle = e.currentTarget.value.trim()
-        setTitle(e.currentTarget.value)
-        if(error && taskTitle)setError(false)
-        if(!error && !taskTitle)setError(true)
-    }
-    const onKeyDownAddTask  = (e: KeyboardEvent<HTMLInputElement>)=> e.key === "Enter" && addTask()
-    const errorInputStyle = error ? {border: "2px solid red", outline: "none"} : undefined
-    return (
-        <div>
-            <input
-                style={errorInputStyle}
-                value={title}
-                onChange={onChangeSetTitle}
-                onKeyDown={onKeyDownAddTask}
+export const AddItemForm = (props: AddItemFormPropsType) => {
+    let [title, setTitle] = useState("")
+    let [error, setError] = useState<string | null>(null)
 
-            />
-            <button onClick={addTask}>+</button>
-            {error && <div style={{color: "red", fontWeight: "bold"}}>Title is required!</div>}
-        </div>
-    );
+    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null);
+        if (e.charCode === 13) {
+            addTitle();
+        }
+    }
+
+    function addTitle() {
+        let newTitle = title.trim();
+        if (newTitle !== "") {
+            props.addItem(newTitle);
+            setTitle('')
+        } else {
+            setError("Title is required");
+        }
+
+    }
+
+    return <div>
+        <TextField
+            label="task"
+            placeholder="Placeholder"
+            multiline
+            size={"small"}
+            variant="outlined"
+            value={title}
+            onChange={onChangeHandler}
+            onKeyPress={onKeyPressHandler}
+            error={!!error}
+            helperText={error}
+        />
+
+        <IconButton
+            onClick={addTitle}
+            color={"primary"}
+        >
+            <AddCircleOutline/>
+        </IconButton>
+    </div>
 };
 
-export default AddItemForm;
