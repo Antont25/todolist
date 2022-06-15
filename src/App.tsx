@@ -5,7 +5,6 @@ import {v1} from 'uuid';
 import {AddItemForm} from "./AddItemsForm";
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
-import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -14,13 +13,13 @@ import {Container, Grid, Paper} from "@material-ui/core";
 
 
 export type FilterValuesType = "all" | "active" | "completed";
-type TodolistType = {
+export type TodolistType = {
     id: string
     title: string
     filter: FilterValuesType
 }
 
-type TasksStateType = {
+export type TasksStateType = {
     [key: string]: Array<TaskType>
 }
 
@@ -29,12 +28,12 @@ function App() {
     let todolistId1 = v1();
     let todolistId2 = v1();
 
-    let [todolists, setTodolists] = useState<Array<TodolistType>>([
+    const [todolists, setTodolists] = useState<Array<TodolistType>>([
         {id: todolistId1, title: "What to learn", filter: "all"},
         {id: todolistId2, title: "What to buy", filter: "all"}
     ])
 
-    let [tasks, setTasks] = useState<TasksStateType>({
+    const [tasks, setTasks] = useState<TasksStateType>({
         [todolistId1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true}
@@ -83,6 +82,7 @@ function App() {
     }
 
     function setNewTitleTodolist(todolistId: string, newTitle: string) {
+        debugger
         setTodolists(todolists.map(item => item.id === todolistId ? {...item, title: newTitle} : item))
     }
 
@@ -101,7 +101,7 @@ function App() {
             </AppBar>
             <Container fixed>
                 <Grid container>
-                    <Grid item spacing={3} style={{padding:'15px'}}>
+                    <Grid item spacing={3} style={{padding: '15px'}}>
                         <AddItemForm addItem={addTodolist}/>
                     </Grid>
 
@@ -120,7 +120,7 @@ function App() {
                             }
 
                             return <Grid item>
-                                <Paper style={{padding:'15px'}} elevation={3}>
+                                <Paper style={{padding: '15px'}} elevation={3}>
                                     <Todolist
                                         key={tl.id}
                                         id={tl.id}
